@@ -1,0 +1,17 @@
+{
+    "name": "phdownloader/phdownloader",
+    "description": "A component for download website page",
+    "authors": [
+        {
+            "name": "ouranoshong",
+            "email": "ouranoshong@outlook.com"
+        }
+    ],
+    "autoload": {
+    	"psr-4": {
+		"PhDownloader\\": "./libs"
+	}
+    },
+
+    "require": {}
+}
