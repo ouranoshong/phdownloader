@@ -16,7 +16,7 @@ use PhDownloader\Enums\Protocols;
 use PhDownloader\Enums\Timer;
 use PhDownloader\Response\ResponseInfo;
 use PhDownloader\Response\ResponseHeader;
-use PhDownloader\Utils\Benchmark;
+use PhUtils\Benchmark;
 
 class Downloader
 {

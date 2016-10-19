@@ -13,5 +13,7 @@
 	}
     },
 
-    "require": {}
+    "require": {
+        "phutils/phutils": "^0.2.0"
+    }
 }

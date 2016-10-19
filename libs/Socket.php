@@ -9,7 +9,7 @@
 namespace PhDownloader;
 
 use PhDownloader\Descriptors\LinkPartsDescriptor;
-use PhDownloader\Utils\DNSUtil;
+use PhUtils\DNSUtil;
 
 class Socket
 {

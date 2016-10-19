@@ -8,7 +8,7 @@
 
 namespace PhDownloader\Descriptors;
 
-use PhDownloader\Utils\LinkUtil;
+use PhUtils\LinkUtil;
 
 class LinkPartsDescriptor
 {

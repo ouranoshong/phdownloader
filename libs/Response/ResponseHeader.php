@@ -10,7 +10,7 @@ namespace PhDownloader\Response;
 
 
 use PhDownloader\Descriptors\CookieDescriptor;
-use PhDownloader\Utils\LinkUtil;
+use PhUtils\LinkUtil;
 
 class ResponseHeader
 {

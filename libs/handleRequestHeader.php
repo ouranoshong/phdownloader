@@ -13,8 +13,8 @@ use PhDownloader\Descriptors\ProxyDescriptor;
 use PhDownloader\Descriptors\LinkPartsDescriptor;
 use PhDownloader\Enums\RequestFieldEnum;
 use PhDownloader\Request\Request;
-use PhDownloader\Utils\EncodingUtil;
-use PhDownloader\Utils\LinkUtil;
+use PhUtils\EncodingUtil;
+use PhUtils\LinkUtil;
 
 /**
  * Class RequestHeader

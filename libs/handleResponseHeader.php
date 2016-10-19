@@ -9,11 +9,11 @@
 namespace PhDownloader;
 
 
-use PhDownloader\Utils\Benchmark;
+use PhUtils\Benchmark;
 use PhDownloader\Enums\RequestErrors;
 use PhDownloader\Enums\Timer;
 use PhDownloader\Response\ResponseHeader;
-use PhDownloader\Utils\LinkUtil;
+use PhUtils\LinkUtil;
 
 trait handleResponseHeader
 {

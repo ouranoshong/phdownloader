@@ -9,10 +9,10 @@
 namespace PhDownloader;
 
 
-use PhDownloader\Utils\Benchmark;
+use PhUtils\Benchmark;
 use PhDownloader\Enums\Protocols;
 use PhDownloader\Enums\Timer;
-use PhDownloader\Utils\EncodingUtil;
+use PhUtils\EncodingUtil;
 
 trait handleResponseBody
 {
