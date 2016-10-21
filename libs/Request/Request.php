@@ -15,18 +15,17 @@ class Request
     /**
      * @var  RequestHeaderCookies
      */
-    protected $cookies;
+    public $cookies;
 
     /**
      * @var  RequestHeaderEntities
      */
-    protected $entities;
+    public $entities;
 
     /**
      * @var
      */
-    protected $headers;
-
+    public $headers;
 
 
     public $firstLine;
@@ -53,10 +52,6 @@ class Request
         $this->headers[] = new RequestHeaderAuth($username, $password);
     }
 
-    public function getHeaders() 
-    {
-        return $this->headers;
-    }
 
     public function addCookie($name, $value) 
     {
@@ -73,10 +68,6 @@ class Request
         return $this;
     }
 
-    public function getHeaderCookies() 
-    {
-        return $this->cookies;
-    }
 
     public function addEntity($name, $value) 
     {
@@ -93,17 +84,13 @@ class Request
         return $this;
     }
 
-    public function getHeaderEntities() 
-    {
-        return $this->entities;
-    }
 
     public function __toString()
     {
         return $this->buildHeader().RequestFieldEnum::SEPARATOR.$this->buildEntityBody();
     }
 
-    public function buildHeader() 
+    protected function buildHeader()
     {
         $sp = RequestFieldEnum::SEPARATOR;
 
@@ -123,7 +110,7 @@ class Request
         ).$sp;
     }
 
-    public function buildEntityBody() 
+    protected function buildEntityBody()
     {
         return (string)(new RequestHeaderEntities($this->entities)).RequestFieldEnum::SEPARATOR;
     }
