@@ -22,7 +22,8 @@ class RequestHeaderEntities extends RequestHeader implements RequestFieldEnum
         $this->setEntityValue();
     }
 
-    public function setEntityValue() {
+    public function setEntityValue() 
+    {
         $this->value = '';
         /**@var $entity \PhDownloader\Request\RequestEntity */
         foreach((array)$this->entities as $entity) {

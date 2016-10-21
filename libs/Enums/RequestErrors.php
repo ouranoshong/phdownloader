@@ -3,21 +3,20 @@
  * Created by PhpStorm.
  * User: hong
  * Date: 9/28/16
- * Time: 3:24 PM
+ * Time: 3:24 PM.
  */
 
 namespace PhDownloader\Enums;
 
-
 interface RequestErrors
 {
     /**
-     * Error-Code: SSL/HTTPS not supported (probably openssl-extension not installed)
+     * Error-Code: SSL/HTTPS not supported (probably openssl-extension not installed).
      */
     const ERROR_SSL_NOT_SUPPORTED = 1;
 
     /**
-     * Error-Code: Host not reachable
+     * Error-Code: Host not reachable.
      */
     const ERROR_HOST_UNREACHABLE = 2;
 
@@ -37,7 +36,7 @@ interface RequestErrors
     const ERROR_SOCKET_TIMEOUT = 5;
 
     /**
-     * Error-Code: Proxy not reachable
+     * Error-Code: Proxy not reachable.
      */
     const ERROR_PROXY_UNREACHABLE = 6;
 }

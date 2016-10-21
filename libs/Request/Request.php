@@ -32,33 +32,40 @@ class Request
     public $firstLine;
 
 
-    public function addFirstLine($firstLine) {
+    public function addFirstLine($firstLine) 
+    {
         $this->firstLine = $firstLine;
     }
 
-    public function addHeader($name, $value) {
+    public function addHeader($name, $value) 
+    {
         $this->headers[] = new RequestHeader($name, $value);
         return $this;
     }
 
-    public function addHeaderAuthProxy($username, $password) {
+    public function addHeaderAuthProxy($username, $password) 
+    {
         $this->headers[] = new RequestHeaderAuthProxy($username, $password);
     }
 
-    public function addHeaderAuth($username, $password) {
+    public function addHeaderAuth($username, $password) 
+    {
         $this->headers[] = new RequestHeaderAuth($username, $password);
     }
 
-    public function getHeaders() {
+    public function getHeaders() 
+    {
         return $this->headers;
     }
 
-    public function addCookie($name, $value) {
+    public function addCookie($name, $value) 
+    {
         $this->cookies[] = new RequestCookie($name, $value);
         return $this;
     }
 
-    public function addCookies($cookie) {
+    public function addCookies($cookie) 
+    {
         foreach((array)$cookie as $name=>$value) {
             $this->addCookie($name, $value);
         }
@@ -66,16 +73,19 @@ class Request
         return $this;
     }
 
-    public function getHeaderCookies() {
+    public function getHeaderCookies() 
+    {
         return $this->cookies;
     }
 
-    public function addEntity($name, $value) {
+    public function addEntity($name, $value) 
+    {
         $this->entities[] = new RequestEntity($name, $value);
         return $this;
     }
 
-    public function addEntities($entities) {
+    public function addEntities($entities) 
+    {
         foreach((array)$entities as $name=>$value) {
             $this->addEntity($name, $value);
         }
@@ -83,7 +93,8 @@ class Request
         return $this;
     }
 
-    public function getHeaderEntities() {
+    public function getHeaderEntities() 
+    {
         return $this->entities;
     }
 
@@ -92,7 +103,8 @@ class Request
         return $this->buildHeader().RequestFieldEnum::SEPARATOR.$this->buildEntityBody();
     }
 
-    public function buildHeader() {
+    public function buildHeader() 
+    {
         $sp = RequestFieldEnum::SEPARATOR;
 
         $headerLines = [$this->firstLine];
@@ -111,7 +123,8 @@ class Request
         ).$sp;
     }
 
-    public function buildEntityBody() {
+    public function buildEntityBody() 
+    {
         return (string)(new RequestHeaderEntities($this->entities)).RequestFieldEnum::SEPARATOR;
     }
 

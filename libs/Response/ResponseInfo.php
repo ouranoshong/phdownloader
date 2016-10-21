@@ -14,7 +14,7 @@ class ResponseInfo
     /**
      * The complete, full qualified URL of the page or file, e.g. "http://www.foo.com/bar/page.html?x=y".
      *
-     * @var string
+     * @var     string
      * @section 1 URL-related information
      */
     public $url = "";
@@ -22,7 +22,7 @@ class ResponseInfo
     /**
      * The linking-depth of the URL related to the entry-URL of the crawling-process.
      *
-     * @var int
+     * @var     int
      * @section 1 URL-related information
      */
     public $url_link_depth = null;
@@ -30,7 +30,7 @@ class ResponseInfo
     /**
      * The protocol-part of the URL of the page or file, e.g. "http://"
      *
-     * @var string
+     * @var     string
      * @section 1 URL-related information
      */
     public $protocol = "";
@@ -38,7 +38,7 @@ class ResponseInfo
     /**
      * The host-part of the URL of the requested page or file, e.g. "www.foo.com".
      *
-     * @var string
+     * @var     string
      * @section 1 URL-related information
      */
     public $host = "";
@@ -46,7 +46,7 @@ class ResponseInfo
     /**
      * The path in the URL of the requested page or file, e.g. "/page/".
      *
-     * @var string
+     * @var     string
      * @section 1 URL-related information
      */
     public $path = "";
@@ -54,7 +54,7 @@ class ResponseInfo
     /**
      * The name of the requested page or file, e.g. "page.html".
      *
-     * @var string
+     * @var     string
      * @section 1 URL-related information
      */
     public $file = "";
@@ -62,7 +62,7 @@ class ResponseInfo
     /**
      * The query-part of the URL of the requested page or file, e.g. "?x=y".
      *
-     * @var string
+     * @var     string
      * @section 1 URL-related information
      */
     public $query = "";
@@ -70,7 +70,7 @@ class ResponseInfo
     /**
      * The port of the URL the request was send to, e.g. 80
      *
-     * @var int
+     * @var     int
      * @section 1 URL-related information
      */
     public $port;
@@ -78,7 +78,7 @@ class ResponseInfo
     /**
      * The complete HTTP-header the webserver responded with this page or file.
      *
-     * @var string
+     * @var     string
      * @section 2 Content-related information
      */
     public $header_received = "";
@@ -94,7 +94,7 @@ class ResponseInfo
     /**
      * Flag indicating whether content was received from the page or file.
      *
-     * @var bool TRUE if the crawler received at least some source/content of this page or file.
+     * @var     bool TRUE if the crawler received at least some source/content of this page or file.
      * @section 2 Content-related information
      */
     public $received = false;
@@ -105,7 +105,7 @@ class ResponseInfo
      * The conten of the current document may not be received comepletely due to settings made
      * with {@link PHPCrawler::setContentSizeLimit()) and/or {@link PHPCrawler::setTrafficLimit()}.
      *
-     * @var bool TRUE if the crawler received the complete source/content of this page or file.
+     * @var     bool TRUE if the crawler received the complete source/content of this page or file.
      * @section 2 Content-related information
      */
     public $received_completely = false;
@@ -116,7 +116,7 @@ class ResponseInfo
      * You will have access to the content of the current page or file through $pageInfo->source.
      *
      * @section 2 Content-related information
-     * @var bool
+     * @var     bool
      */
     public $received_to_memory = false;
 
@@ -126,14 +126,14 @@ class ResponseInfo
      * The content is stored in the temporary file $pageInfo->content_tmp_file in this case.
      *
      * @section 2 Content-related information
-     * @var bool
+     * @var     bool
      */
     public $received_to_file = false;
 
     /**
      * The number of bytes the crawler received of the content of the document.
      *
-     * @var int Received bytes
+     * @var     int Received bytes
      * @section 2 Content-related information
      */
     public $bytes_received = 0;
@@ -141,7 +141,7 @@ class ResponseInfo
     /**
      * The number of bytes the crawler received of the header of the document.
      *
-     * @var int Received bytes
+     * @var     int Received bytes
      * @section 2 Content-related information
      */
     public $header_bytes_received = 0;
@@ -149,7 +149,7 @@ class ResponseInfo
     /**
      * The content-type of the page or file, e.g. "text/html" or "image/gif".
      *
-     * @var string The content-type
+     * @var     string The content-type
      * @section 2 Content-related information
      */
     public $content_type = "";
@@ -158,7 +158,7 @@ class ResponseInfo
     /**
      * Same as "content", the content of the requested document.
      *
-     * @var string
+     * @var     string
      * @section 2 Content-related information
      */
     public $content = "";
@@ -168,7 +168,7 @@ class ResponseInfo
      *
      * Will be NULL if the content wasn't received to the temporary file.
      *
-     * @var string
+     * @var     string
      * @section 2 Content-related information
      */
     public $content_tmp_file = null;
@@ -176,7 +176,7 @@ class ResponseInfo
     /**
      * The HTTP-statuscode the webserver responded for the request, e.g. 200 (OK) or 404 (file not found).
      *
-     * @var int
+     * @var     int
      * @section 2 Content-related information
      */
     public $http_status_code = null;
@@ -188,7 +188,7 @@ class ResponseInfo
     /**
      * The complete URL of the page that contained the link to this document.
      *
-     * @var string
+     * @var     string
      * @section 7 Referer information
      */
     public $referer_url = null;
@@ -198,7 +198,7 @@ class ResponseInfo
      *
      * (E.g. <a href="../foo.html">LINKTEXT</a>)
      *
-     * @var string
+     * @var     string
      * @section 7 Referer information
      */
     public $refering_link_code = null;
@@ -206,7 +206,7 @@ class ResponseInfo
     /**
      * Contains the raw link as it was found in the content of the refering URL. (E.g. "../foo.html")
      *
-     * @var string
+     * @var     string
      * @section 7 Referer information
      */
     public $refering_link_raw = null;
@@ -217,7 +217,7 @@ class ResponseInfo
      * E.g. if the refering link was <a href="../foo.html">LINKTEXT</a>, the refering linktext is "LINKTEXT".
      * May contain html-tags of course.
      *
-     * @var string
+     * @var     string
      * @section 7 Referer information
      */
     public $refering_link_text = null;
@@ -225,7 +225,7 @@ class ResponseInfo
     /**
      * Indicates whether an error occured while requesting/receiving the document.
      *
-     * @var bool TRUE if an error occured.
+     * @var     bool TRUE if an error occured.
      * @section 8 Error-handling
      */
     public $error_occured = false;
@@ -234,7 +234,7 @@ class ResponseInfo
      * The code of the error that perhaps occured while requesting/receiving the document.
      * (See PHPCrawlerRequestErrors::ERROR_... - constants)
      *
-     * @var int One of the {@link PHPCrawlerRequestErrors}::ERROR_ ... constants.
+     * @var     int One of the {@link PHPCrawlerRequestErrors}::ERROR_ ... constants.
      * @section 8 Error-handling
      */
     public $error_code = null;
@@ -242,7 +242,7 @@ class ResponseInfo
     /**
      * A representig, human readable string for the error that perhaps occured while requesting/receiving the document.
      *
-     * @var string A human readable error-string.
+     * @var     string A human readable error-string.
      * @section 8 Error-handling
      */
     public $error_message = null;
@@ -264,7 +264,7 @@ class ResponseInfo
      * This is an calculated value and gets more accurate with larger received documents.
      * It may not be avaliable for very small documents.
      *
-     * @var float The rate in bytes per seconds or NULL if the rate couldn't be determinated
+     * @var     float The rate in bytes per seconds or NULL if the rate couldn't be determinated
      * @section 10 Benchmarks
      */
     public $data_transfer_rate = null;
@@ -272,7 +272,7 @@ class ResponseInfo
     /**
      * The time it took to connect to the server
      *
-     * @var float  The time in seconds and milliseconds or NULL if connection could not be established
+     * @var     float  The time in seconds and milliseconds or NULL if connection could not be established
      * @section 10 Benchmarks
      */
     public $server_connect_time = null;
@@ -282,7 +282,7 @@ class ResponseInfo
      *
      * The response-time is the time the server needs to respond to a HTTP-request-header.
      *
-     * @var float Time in seconds and milliseconds or NULL if the server didn't respond
+     * @var     float Time in seconds and milliseconds or NULL if the server didn't respond
      * @section 10 Benchmarks
      */
     public $server_response_time = null;
@@ -293,7 +293,7 @@ class ResponseInfo
      * The server-connect-time and response-time are NOT included.
      * It may not be avaliable for very small documents.
      *
-     * @var float The time in seconds and milliseconds or NULL if not avaliable
+     * @var     float The time in seconds and milliseconds or NULL if not avaliable
      * @section 10 Benchmarks
      */
     public $data_transfer_time = null;
@@ -303,7 +303,7 @@ class ResponseInfo
      *
      * It may not be avaliable for very small documents.
      *
-     * @var int The time in seconds and milliseconds or NULL if not avaliable
+     * @var     int The time in seconds and milliseconds or NULL if not avaliable
      * @section 10 Benchmarks
      */
     public $unbuffered_bytes_read = null;
@@ -311,10 +311,9 @@ class ResponseInfo
     /**
      * Some internal benchmak-results as array (debugging).
      *
-     * @var array Array containing some interlnal benchmark-results for receiving and processing this document.
+     * @var     array Array containing some interlnal benchmark-results for receiving and processing this document.
      *            The keys are the identifiers, the values are the benchmark-times.
      * @section 10 Benchmarks
-     *
      */
     public $benchmarks = array();
 }

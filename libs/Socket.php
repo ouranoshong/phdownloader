@@ -46,15 +46,18 @@ class Socket
      */
     public $LinkParsDescriptor;
 
-    protected function isSSLConnection() {
+    protected function isSSLConnection() 
+    {
         return $this->LinkParsDescriptor instanceof LinkPartsDescriptor && $this->LinkParsDescriptor->isSSL();
     }
 
-    protected function isProxyConnection() {
+    protected function isProxyConnection() 
+    {
         return $this->ProxyDescriptor instanceof ProxyDescriptor && $this->ProxyDescriptor->host !== null;
     }
 
-    protected function canOpen() {
+    protected function canOpen() 
+    {
 
         if (!($this->LinkParsDescriptor instanceof LinkPartsDescriptor)) {
 
@@ -64,8 +67,7 @@ class Socket
 
         }
 
-        if ($this->isSSLConnection() && !extension_loaded("openssl"))
-        {
+        if ($this->isSSLConnection() && !extension_loaded("openssl")) {
             $UrlParts = $this->LinkParsDescriptor;
             $this->error_code = self::ERROR_SSL_NOT_SUPPORTED;
             $this->error_message = "Error connecting to ".$UrlParts->protocol.$UrlParts->host.": SSL/HTTPS-requests not supported, extension openssl not installed.";
@@ -78,7 +80,8 @@ class Socket
     public function open()
     {
 
-        if (!$this->canOpen()) return false;
+        if (!$this->canOpen()) { return false;
+        }
 
         if ($context = $this->getClientContext()) {
             $this->_socket = @stream_socket_client(
@@ -103,12 +106,11 @@ class Socket
         return $this->checkOpened();
     }
 
-    protected function checkOpened() {
-        if ($this->_socket == false)
-        {
+    protected function checkOpened() 
+    {
+        if ($this->_socket == false) {
             // If proxy not reachable
-            if ($this->isProxyConnection())
-            {
+            if ($this->isProxyConnection()) {
                 $this->error_code = self::ERROR_PROXY_UNREACHABLE;
                 $this->error_message = "Error connecting to proxy ".$this->ProxyDescriptor->host.": Host unreachable (".$this->error_message.").";
                 return false;
@@ -124,7 +126,8 @@ class Socket
         return true;
     }
 
-    protected function getClientRemoteURI() {
+    protected function getClientRemoteURI() 
+    {
 
         $protocol_prefix = '';
 
@@ -146,14 +149,16 @@ class Socket
         return $protocol_prefix . $host . ':'.$port;
     }
 
-    protected function getClientContext() {
+    protected function getClientContext() 
+    {
         if ($this->isSSLConnection()) {
             return @stream_context_create(array('ssl' => array('peer_name' => $this->LinkParsDescriptor->host)));
         }
         return null;
     }
 
-    public function close() {
+    public function close() 
+    {
         @fclose($this->_socket);
     }
 
@@ -162,15 +167,18 @@ class Socket
         return @fwrite($this->_socket, $message, strlen($message));
     }
 
-    public function read($buffer = 1024) {
+    public function read($buffer = 1024) 
+    {
         return @fread($this->_socket, $buffer);
     }
 
-    public function gets($buffer = 128) {
+    public function gets($buffer = 128) 
+    {
         return @fgets($this->_socket, $buffer);
     }
 
-    public function setTimeOut($timeout = null) {
+    public function setTimeOut($timeout = null) 
+    {
 
         if ($timeout) {
             $this->timeout = $timeout;
@@ -184,10 +192,10 @@ class Socket
         return @socket_get_status($this->_socket);
     }
 
-    public function checkTimeoutStatus() {
+    public function checkTimeoutStatus() 
+    {
         $status = $this->getStatus();
-        if ($status["timed_out"] == true)
-        {
+        if ($status["timed_out"] == true) {
             $this->error_code = self::ERROR_SOCKET_TIMEOUT;
             $this->error_message = "Socket-stream timed out (timeout set to ".$this->timeout." sec).";
             return true;
@@ -195,11 +203,13 @@ class Socket
         return false;
     }
 
-    public function isEOF() {
+    public function isEOF() 
+    {
         return ($this->getStatus()["eof"] == true || feof($this->_socket) == true);
     }
 
-    public function getUnreadBytes() {
+    public function getUnreadBytes() 
+    {
         return $this->getStatus()['unread_bytes'];
     }
 
