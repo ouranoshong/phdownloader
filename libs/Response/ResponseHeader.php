@@ -9,7 +9,7 @@
 namespace PhDownloader\Response;
 
 
-use PhDownloader\Descriptors\CookieDescriptor;
+use PhDescriptors\CookieDescriptor;
 use PhUtils\LinkUtil;
 
 class ResponseHeader

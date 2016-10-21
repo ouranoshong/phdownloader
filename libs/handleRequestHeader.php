@@ -9,8 +9,8 @@
 namespace PhDownloader;
 
 
-use PhDownloader\Descriptors\ProxyDescriptor;
-use PhDownloader\Descriptors\LinkPartsDescriptor;
+use PhDescriptors\ProxyDescriptor;
+use PhDescriptors\LinkPartsDescriptor;
 use PhDownloader\Enums\RequestFieldEnum;
 use PhDownloader\Request\Request;
 use PhUtils\EncodingUtil;

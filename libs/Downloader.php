@@ -9,14 +9,15 @@
 namespace PhDownloader;
 
 
-use PhDownloader\Descriptors\LinkDescriptor;
-use PhDownloader\Descriptors\LinkPartsDescriptor;
-use PhDownloader\Descriptors\ProxyDescriptor;
+use PhDescriptors\LinkDescriptor;
+use PhDescriptors\LinkPartsDescriptor;
+use PhDescriptors\ProxyDescriptor;
 use PhDownloader\Enums\Protocols;
 use PhDownloader\Enums\Timer;
 use PhDownloader\Response\ResponseInfo;
 use PhDownloader\Response\ResponseHeader;
 use PhUtils\Benchmark;
+use PhUtils\LinkUtil;
 
 class Downloader
 {
@@ -206,7 +207,7 @@ class Downloader
 
         }
 
-        $this->LinkPartsDescriptor->init($this->LinkDescriptor->url_rebuild);
+        $this->LinkPartsDescriptor->init(LinkUtil::parse($this->LinkDescriptor->url_rebuild));
     }
 
     /**
@@ -319,7 +320,7 @@ class Downloader
                 $this->LinkDescriptor->url_rebuild
             );
         } else if (!$this->LinkPartsDescriptor->host) {
-            $this->LinkPartsDescriptor->init($this->LinkDescriptor->url_rebuild);
+            $this->LinkPartsDescriptor->init(LinkUtil::parse($this->LinkDescriptor->url_rebuild));
         }
 
         if (!$this->http_protocol_version) {

@@ -9,7 +9,7 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$link = new \PhDownloader\Descriptors\LinkDescriptor(
+$link = new \PhDescriptors\LinkDescriptor(
     'http://www.baidu.com'
 );
 

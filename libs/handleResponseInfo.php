@@ -11,8 +11,8 @@
 
 namespace PhDownloader;
 
-use PhDownloader\Descriptors\LinkDescriptor;
-use PhDownloader\Descriptors\LinkPartsDescriptor;
+use PhDescriptors\LinkDescriptor;
+use PhDescriptors\LinkPartsDescriptor;
 use PhDownloader\Response\ResponseInfo;
 use PhDownloader\Response\ResponseHeader;
 
