@@ -16,7 +16,6 @@ use PhDownloader\Enums\Protocols;
 use PhDownloader\Enums\Timer;
 use PhDownloader\Response\ResponseInfo;
 use PhDownloader\Response\ResponseHeader;
-use PhUtils\Benchmark;
 
 class Downloader
 {
@@ -337,8 +336,8 @@ class Downloader
         $this->Socket = $Socket = new Socket();
         $Socket->LinkParsDescriptor = $this->LinkPartsDescriptor;
 
-        Benchmark::reset(Timer::SERVER_CONNECT);
-        Benchmark::start(Timer::SERVER_CONNECT);
+        \PhBench\reset_benchmarks(Timer::SERVER_CONNECT);
+        \PhBench\start_benchmark(Timer::SERVER_CONNECT);
 
         if (!$Socket->open()) {
 
@@ -350,7 +349,7 @@ class Downloader
         }
 
 
-        $this->setServerConnectTime(Benchmark::stop(Timer::SERVER_CONNECT));
+        $this->setServerConnectTime(\PhBench\stop_benchmark(Timer::SERVER_CONNECT));
 
         return true;
     }

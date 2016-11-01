@@ -8,8 +8,6 @@
 
 namespace PhDownloader;
 
-
-use PhUtils\Benchmark;
 use PhDownloader\Enums\RequestErrors;
 use PhDownloader\Enums\Timer;
 use PhDownloader\Response\ResponseHeader;
@@ -22,8 +20,8 @@ trait handleResponseHeader
         /**@var \PhDownloader\Socket $Socket */
         $Socket = $this->Socket;
 
-        Benchmark::reset(Timer::SERVER_RESPONSE);
-        Benchmark::start(Timer::SERVER_RESPONSE);
+        \PhBench\reset_benchmarks(Timer::SERVER_RESPONSE);
+        \PhBench\start_benchmark(Timer::SERVER_RESPONSE);
 
         $source_read = '';
         $header = '';
@@ -36,13 +34,12 @@ trait handleResponseHeader
 
             if ($server_response == false) {
 
-                $this->setServerResponseTime(Benchmark::stop(Timer::SERVER_RESPONSE));
+                $this->setServerResponseTime(\PhBench\stop_benchmark(Timer::SERVER_RESPONSE));
                 $this->socket_pre_fill_size = $Socket->getUnreadBytes();
                 $server_response = true;
 
-                Benchmark::reset(Timer::DATA_TRANSFER);
-                Benchmark::start(Timer::DATA_TRANSFER);
-
+                \PhBench\reset_benchmarks(Timer::DATA_TRANSFER);
+                \PhBench\start_benchmark(Timer::DATA_TRANSFER);
             }
 
             $source_read .= $line_read;
@@ -69,7 +66,7 @@ trait handleResponseHeader
             }
         }
 
-        Benchmark::stop(Timer::DATA_TRANSFER);
+        \PhBench\stop_benchmark(Timer::DATA_TRANSFER);
 
         // Header was found
         if ($header != "")
