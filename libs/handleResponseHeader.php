@@ -9,7 +9,7 @@
 namespace PhDownloader;
 
 use PhDownloader\Enums\RequestErrors;
-use PhDownloader\Enums\Timer;
+
 use PhDownloader\Response\ResponseHeader;
 use PhUtils\LinkUtil;
 
@@ -21,8 +21,8 @@ trait handleResponseHeader
         /**@var \PhDownloader\Socket $Socket */
         $Socket = $this->Socket;
 
-        \PhBench\reset_benchmarks(Timer::SERVER_RESPONSE);
-        \PhBench\start_benchmark(Timer::SERVER_RESPONSE);
+        \PhBench\reset_benchmarks(DownloaderInterface::TIME_SERVER_RESPONSE);
+        \PhBench\start_benchmark(DownloaderInterface::TIME_SERVER_RESPONSE);
 
         $source_read = '';
         $header = '';
@@ -35,12 +35,12 @@ trait handleResponseHeader
 
             if ($server_response == false) {
 
-                $this->setServerResponseTime(\PhBench\stop_benchmark(Timer::SERVER_RESPONSE));
+                $this->setServerResponseTime(\PhBench\stop_benchmark(DownloaderInterface::TIME_SERVER_RESPONSE));
                 $this->socket_pre_fill_size = $Socket->getUnreadBytes();
                 $server_response = true;
 
-                \PhBench\reset_benchmarks(Timer::DATA_TRANSFER);
-                \PhBench\start_benchmark(Timer::DATA_TRANSFER);
+                \PhBench\reset_benchmarks(DownloaderInterface::TIME_DATA_TRANSFER);
+                \PhBench\start_benchmark(DownloaderInterface::TIME_DATA_TRANSFER);
             }
 
             $source_read .= $line_read;
@@ -65,7 +65,7 @@ trait handleResponseHeader
             }
         }
 
-        \PhBench\stop_benchmark(Timer::DATA_TRANSFER);
+        \PhBench\stop_benchmark(DownloaderInterface::TIME_DATA_TRANSFER);
 
         // Header was found
         if ($header != "") {

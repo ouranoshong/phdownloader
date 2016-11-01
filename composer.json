@@ -15,7 +15,7 @@
 
     "require": {
         "phutils/phutils": "^0.2.0",
-        "phdescriptors/phdescriptors": "^0.1.1"
+        "phdescriptors/phdescriptors": "^0.1.1",
         "phbench/phbench": "^0.2.0"
     }
 }

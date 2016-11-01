@@ -12,12 +12,10 @@ use PhDescriptors\LinkDescriptor;
 use PhDescriptors\LinkPartsDescriptor;
 use PhDescriptors\ProxyDescriptor;
 use PhDownloader\Enums\Protocols;
-use PhDownloader\Enums\Timer;
 use PhDownloader\Response\ResponseInfo;
 use PhDownloader\Response\ResponseHeader;
 
-
-class Downloader
+class Downloader implements DownloaderInterface
 {
     use handleResponseInfo,
         handleRequestHeader,
@@ -316,8 +314,8 @@ class Downloader
         $this->Socket = $Socket = new Socket();
         $Socket->LinkParsDescriptor = $this->LinkPartsDescriptor;
 
-        \PhBench\reset_benchmarks(Timer::SERVER_CONNECT);
-        \PhBench\start_benchmark(Timer::SERVER_CONNECT);
+        \PhBench\reset_benchmarks(DownloaderInterface::TIME_SERVER_CONNECT);
+        \PhBench\start_benchmark(DownloaderInterface::TIME_SERVER_CONNECT);
 
         if (!$Socket->open()) {
             $this->setServerConnectTime();
@@ -327,7 +325,7 @@ class Downloader
             return false;
         }
 
-        $this->setServerConnectTime(Benchmark::stop(Timer::SERVER_CONNECT));
+        $this->setServerConnectTime(\PhBench\stop_benchmark(DownloaderInterface::TIME_SERVER_CONNECT));
 
         return true;
     }
@@ -387,7 +385,7 @@ class Downloader
         // To calulate the real data transfer rate, these bytes have to be substractred from the received
         // bytes beofre calulating the rate.
 
-        if ($data_transfer_time > 0 && $this->content_bytes_received > 4 * $this->socket_pre_fill_size) {
+        if ($data_transfer_time > 0 && ($this->content_bytes_received > 4 * $this->socket_pre_fill_size)) {
             $dataValues['unbuffered_bytes_read'] = $this->content_bytes_received + $this->header_bytes_received - $this->socket_pre_fill_size;
             $dataValues['data_transfer_rate'] = $dataValues['unbuffered_bytes_read'] / $data_transfer_time;
             $dataValues['data_transfer_time'] = $data_transfer_time;

@@ -8,10 +8,7 @@
 
 namespace PhDownloader;
 
-
-use PhUtils\Benchmark;
 use PhDownloader\Enums\Protocols;
-use PhDownloader\Enums\Timer;
 use PhUtils\EncodingUtil;
 
 trait handleResponseBody
@@ -25,7 +22,7 @@ trait handleResponseBody
         $this->document_completed = false;
         $gzip_encoded_content = null;
 
-        \PhBench\start_benchmark(Timer::DATA_TRANSFER);
+        \PhBench\start_benchmark(DownloaderInterface::TIME_DATA_TRANSFER);
 
         while ($this->document_completed == false) {
             $content_chunk = $this->readResponseBodyChunk();
@@ -45,9 +42,9 @@ trait handleResponseBody
             }
         }
 
-        \PhBench\stop_benchmark(Timer::DATA_TRANSFER);
+        \PhBench\stop_benchmark(DownloaderInterface::TIME_DATA_TRANSFER);
 
-        $this->setDataTransferTime(\PhBench\get_elapsed_time(Timer::DATA_TRANSFER));
+        $this->setDataTransferTime(\PhBench\get_elapsed_time(DownloaderInterface::TIME_DATA_TRANSFER));
 
         return $source_complete;
     }
