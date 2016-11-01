@@ -10,5 +10,5 @@ namespace PhDownloader\Request;
 
 class RequestHeaderAuthProxy extends RequestHeaderAuth
 {
-       public $name = 'Proxy-Authorization';
+    public $name = 'Proxy-Authorization';
 }

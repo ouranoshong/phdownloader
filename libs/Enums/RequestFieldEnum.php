@@ -3,11 +3,10 @@
  * Created by PhpStorm.
  * User: hong
  * Date: 16-10-1
- * Time: 下午5:41
+ * Time: 下午5:41.
  */
 
 namespace PhDownloader\Enums;
-
 
 interface RequestFieldEnum
 {

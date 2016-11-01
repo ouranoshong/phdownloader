@@ -9,7 +9,7 @@
 namespace PhDownloader\Response;
 
 
-use PhDownloader\Descriptors\CookieDescriptor;
+use PhDescriptors\CookieDescriptor;
 use PhUtils\LinkUtil;
 
 class ResponseHeader
@@ -31,7 +31,7 @@ class ResponseHeader
     /**
      * Gets the HTTP-statuscode from a given response-header.
      *
-     * @param string $header  The response-header
+     * @param  string $header The response-header
      * @return int            The status-code or NULL if no status-code was found.
      */
     public static function parseHttpStatusCode($header)
@@ -40,17 +40,18 @@ class ResponseHeader
 
         preg_match("# [0-9]{3}#", $first_line, $match);
 
-        if (isset($match[0]))
+        if (isset($match[0])) {
             return (int)trim($match[0]);
-        else
+        } else {
             return null;
+        }
     }
 
     /**
      * Returns all cookies from the give response-header.
      *
-     * @param string $header      The response-header
-     * @param string $source_url  URL the cookie was send from.
+     * @param  string $header     The response-header
+     * @param  string $source_url URL the cookie was send from.
      * @return array Numeric array containing all cookies as CookieDescriptor-objects.
      */
     public static function getCookies($header, $source_url)
@@ -59,8 +60,7 @@ class ResponseHeader
 
         $hits = preg_match_all("#[\r\n]set-cookie:(.*)[\r\n]# Ui", $header, $matches);
 
-        if ($hits && $hits != 0)
-        {
+        if ($hits && $hits != 0) {
             for ($x=0; $x<count($matches[1]); $x++)
             {
                 $cookies[] = CookieDescriptor::getFromHeaderLine($matches[1][$x], $source_url);
@@ -127,7 +127,8 @@ class ResponseHeader
     public $source_url;
 
 
-    public function isTransferEncodingChunked() {
+    public function isTransferEncodingChunked() 
+    {
         return $this->transfer_encoding == 'chunked';
     }
 }

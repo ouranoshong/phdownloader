@@ -3,11 +3,10 @@
  * Created by PhpStorm.
  * User: hong
  * Date: 9/30/16
- * Time: 4:36 PM
+ * Time: 4:36 PM.
  */
 
 namespace PhDownloader\Enums;
-
 
 interface Timer
 {

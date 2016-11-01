@@ -21,13 +21,15 @@ class RequestHeaderCookies extends RequestHeader
         $this->setCookiesValue($cookies);
     }
 
-    public function setCookiesValue($cookies) {
+    public function setCookiesValue($cookies) 
+    {
         /**@var $cookie \PhDownloader\Request\RequestCookie */
         foreach((array)$cookies as $cookie) {
             $this->value .= "; ".$cookie;
         }
 
-        if ($this->value) $this->value = substr($this->value, 2);
+        if ($this->value) { $this->value = substr($this->value, 2);
+        }
     }
 
 }

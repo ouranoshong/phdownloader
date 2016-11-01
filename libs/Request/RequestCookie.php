@@ -20,7 +20,8 @@ class RequestCookie implements RequestField
         return $this->generateCookieField();
     }
 
-    protected function generateCookieField() {
+    protected function generateCookieField() 
+    {
         return $this->name . '='. $this->value;
     }
 }

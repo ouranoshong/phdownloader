@@ -22,7 +22,8 @@ class RequestHeaderAuth extends RequestHeader
         $this->setAuthValue();
     }
 
-    protected function setAuthValue() {
+    protected function setAuthValue() 
+    {
         $this->value = 'Basic '. base64_encode($this->username . ":" . $this->password);
     }
 
