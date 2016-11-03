@@ -1,6 +1,7 @@
 {
     "name": "phdownloader/phdownloader",
     "description": "A component for download website page",
+    "keywords": ["socket", "spider", "downloader"],
     "authors": [
         {
             "name": "ouranoshong",
