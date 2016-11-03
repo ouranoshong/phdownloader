@@ -38,7 +38,7 @@ class Downloader implements DownloaderInterface
     /**
      * @var bool
      */
-    public $request_gzip_content = true;
+    protected $request_gzip_content = true;
     /**
      * @var string
      */
@@ -56,17 +56,17 @@ class Downloader implements DownloaderInterface
     /**
      * @var LinkDescriptor
      */
-    public $LinkDescriptor;
+    protected $LinkDescriptor;
 
     /**
      * @var LinkPartsDescriptor
      */
-    public $LinkPartsDescriptor;
+    protected $LinkPartsDescriptor;
 
     /**
      * @var ProxyDescriptor
      */
-    public $ProxyDescriptor;
+    protected $ProxyDescriptor;
 
     /**
      * @var array
@@ -101,12 +101,12 @@ class Downloader implements DownloaderInterface
     /**
      * @var ResponseHeader
      */
-    public $ResponseHeader;
+    protected $ResponseHeader;
 
     /**
      * @var ResponseInfo
      */
-    public $ResponseInfo;
+    protected $ResponseInfo;
 
     /**
      * @var Socket
@@ -345,8 +345,6 @@ class Downloader implements DownloaderInterface
     protected function readResponseContent()
     {
         $responseHeaderRaw = $this->readResponseHeader();
-
-        $this->setResponseInfoHeaderReceived($responseHeaderRaw);
 
         $this->ResponseHeader = new ResponseHeader($responseHeaderRaw, $this->LinkDescriptor->url_rebuild);
 

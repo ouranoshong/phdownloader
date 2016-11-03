@@ -110,7 +110,7 @@ class Request
         ).$sp;
     }
 
-    protected function buildEntityBody()
+    public function buildEntityBody()
     {
         return (string)(new RequestHeaderEntities($this->entities)).RequestFieldEnum::SEPARATOR;
     }

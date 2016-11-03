@@ -10,7 +10,7 @@
 require __DIR__ . '/../vendor/autoload.php';
 
 $link = new \PhDescriptors\LinkDescriptor(
-    'http://www.baidu.com'
+    'https://www.baidu.com'
 );
 
 $Request = new \PhDownloader\Downloader();

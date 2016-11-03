@@ -181,10 +181,6 @@ class ResponseInfo
      */
     public $http_status_code = null;
 
-
-    public $response_cookies = array();
-
-
     /**
      * The complete URL of the page that contained the link to this document.
      *
@@ -307,14 +303,5 @@ class ResponseInfo
      * @section 10 Benchmarks
      */
     public $unbuffered_bytes_read = null;
-
-    /**
-     * Some internal benchmak-results as array (debugging).
-     *
-     * @var     array Array containing some interlnal benchmark-results for receiving and processing this document.
-     *            The keys are the identifiers, the values are the benchmark-times.
-     * @section 10 Benchmarks
-     */
-    public $benchmarks = array();
 }
 

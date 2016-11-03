@@ -29,7 +29,6 @@ trait handleResponseInfo
     {
         $this->ResponseInfo->http_status_code = $responseHeader->http_status_code;
         $this->ResponseInfo->content_type = $responseHeader->content_type;
-        $this->ResponseInfo->response_cookies = $responseHeader->cookies;
         $this->setResponseInfoHeaderReceived($responseHeader->header_raw);
     }
 
