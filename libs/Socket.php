@@ -8,8 +8,8 @@
 
 namespace PhDownloader;
 
-use PhDescriptors\LinkPartsDescriptor;
 use PhUtils\DNSUtil;
+use Psr\Http\Message\RequestInterface;
 
 class Socket
 {
@@ -22,7 +22,6 @@ class Socket
     const ERROR_SSL_NOT_SUPPORTED = 103;
     
     const ERROR_HOST_UNREACHABLE = 104;
-    
 
     /**
      * @var resource
@@ -33,34 +32,25 @@ class Socket
     public $error_code;
     public $error_message;
 
-    public $flag = STREAM_CLIENT_CONNECT;
+    protected $standardPorts = [
+        'http' => 80,
+        'https' => 443
+    ];
 
-    protected $protocol_prefix = '';
+    protected $request;
 
-    /**
-     * @var ProxyDescriptor
-     */
-    public $ProxyDescriptor;
-    /**
-     * @var LinkPartsDescriptor
-     */
-    public $LinkParsDescriptor;
-
-    protected function isSSLConnection() 
+    public function __construct(RequestInterface $request)
     {
-        return $this->LinkParsDescriptor instanceof LinkPartsDescriptor && $this->LinkParsDescriptor->isSSL();
+        $this->request = $request;
     }
 
-    protected function isProxyConnection() 
-    {
-        return $this->ProxyDescriptor instanceof ProxyDescriptor && $this->ProxyDescriptor->host !== null;
+    private function isSSLConnection() {
+        return $this->request->getUri()->getScheme() === 'https';
     }
 
     protected function canOpen() 
     {
-
-        if (!($this->LinkParsDescriptor instanceof LinkPartsDescriptor)) {
-
+        if (!($this->request->getUri()->getHost())) {
             $this->error_code = self::ERROR_HOST_UNREACHABLE;
             $this->error_message = "Require connection information!";
             return false;
@@ -80,28 +70,16 @@ class Socket
     public function open()
     {
 
-        if (!$this->canOpen()) { return false;
-        }
+        if (!$this->canOpen()) { return false; }
 
-        if ($context = $this->getClientContext()) {
-            $this->_socket = @stream_socket_client(
-                $this->getClientRemoteURI(),
-                $this->error_code,
-                $this->error_message,
-                $this->timeout,
-                $this->flag,
-                $context
-            );
-        }  else {
-            $this->_socket = @stream_socket_client(
-                $this->getClientRemoteURI(),
-                $this->error_code,
-                $this->error_message,
-                $this->timeout,
-                $this->flag
-            );
-
-        }
+        $this->_socket = @stream_socket_client(
+            $this->getClientRemoteURI(),
+            $this->error_code,
+            $this->error_message,
+            $this->timeout,
+            STREAM_CLIENT_CONNECT,
+            $this->getClientContext()
+        );
 
         return $this->checkOpened();
     }
@@ -110,40 +88,26 @@ class Socket
     {
         if ($this->_socket == false) {
             // If proxy not reachable
-            if ($this->isProxyConnection()) {
-                $this->error_code = self::ERROR_PROXY_UNREACHABLE;
-                $this->error_message = "Error connecting to proxy ".$this->ProxyDescriptor->host.": Host unreachable (".$this->error_message.").";
-                return false;
+            $host = $this->request->getUri()->getScheme() . '://'. $this->request->getUri()->getHost();
+            if ($this->request->getUri()->getPort()) {
+                $host .= ':'.$this->request->getUri()->getPort();
             }
-            else
-            {
-                $UrlParts = $this->LinkParsDescriptor;
-                $this->error_code = self::ERROR_HOST_UNREACHABLE;
-                $this->error_message = "Error connecting to ".$UrlParts->protocol.$UrlParts->host.": Host unreachable (".$this->error_message.").";
-                return false;
-            }
+            $this->error_code = self::ERROR_HOST_UNREACHABLE;
+            $this->error_message = "Error connecting to $host: Host unreachable (".$this->error_message.").";
+            return false;
         }
         return true;
     }
 
     protected function getClientRemoteURI() 
     {
-
         $protocol_prefix = '';
+        $host = DNSUtil::getIpByHostName($this->request->getUri()->getHost());
+        $port = $this->request->getUri()->getPort() ? : $this->standardPorts[$this->request->getUri()->getScheme()];
 
-        if ($this->isProxyConnection()) {
-            $host = $this->ProxyDescriptor->host;
-            $port = $this->ProxyDescriptor->port;
-        } else {
-
-            $host = DNSUtil::getIpByHostName($this->LinkParsDescriptor->host);
-            $port = $this->LinkParsDescriptor->port;
-
-            if ($this->isSSLConnection()) {
-                $host = $this->LinkParsDescriptor->host;
-                $protocol_prefix = self::SOCKET_PROTOCOL_PREFIX_SSL;
-            }
-
+        if ($this->isSSLConnection()) {
+            $host = $this->request->getUri()->getHost();
+            $protocol_prefix = self::SOCKET_PROTOCOL_PREFIX_SSL;
         }
 
         return $protocol_prefix . $host . ':'.$port;
@@ -152,9 +116,9 @@ class Socket
     protected function getClientContext() 
     {
         if ($this->isSSLConnection()) {
-            return @stream_context_create(array('ssl' => array('peer_name' => $this->LinkParsDescriptor->host)));
+            return @stream_context_create(['ssl' => array('peer_name' => $this->request->getUri()->getHost())]);
         }
-        return null;
+        return @stream_context_create();
     }
 
     public function close() 
