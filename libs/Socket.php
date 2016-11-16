@@ -11,44 +11,92 @@ namespace PhDownloader;
 use PhUtils\DNSUtil;
 use Psr\Http\Message\RequestInterface;
 
+/**
+ * Class Socket
+ *
+ * @package PhDownloader
+ */
 class Socket
 {
+    /**
+     *
+     */
     const SOCKET_PROTOCOL_PREFIX_SSL = 'ssl://';
 
+    /**
+     *
+     */
     const ERROR_PROXY_UNREACHABLE = 101;
-    
+
+    /**
+     *
+     */
     const ERROR_SOCKET_TIMEOUT = 102;
-    
+
+    /**
+     *
+     */
     const ERROR_SSL_NOT_SUPPORTED = 103;
-    
+
+    /**
+     *
+     */
     const ERROR_HOST_UNREACHABLE = 104;
+
+    /**
+     * @var int
+     */
+    public $timeout = 6;
+    /**
+     * @var
+     */
+    public $error_code;
+    /**
+     * @var
+     */
+    public $error_message;
+
+    /**
+     * @var array
+     */
+    protected $standardPorts = [
+        'http' => 80,
+        'https' => 443
+    ];
+
+
+    /**
+     * @var \Psr\Http\Message\RequestInterface
+     */
+    protected $request;
 
     /**
      * @var resource
      */
     protected $_socket;
 
-    public $timeout = 6;
-    public $error_code;
-    public $error_message;
 
-    protected $standardPorts = [
-        'http' => 80,
-        'https' => 443
-    ];
-
-    protected $request;
-
+    /**
+     * Socket constructor.
+     *
+     * @param \Psr\Http\Message\RequestInterface $request
+     */
     public function __construct(RequestInterface $request)
     {
         $this->request = $request;
     }
 
+    /**
+     * @return bool
+     */
     private function isSSLConnection() {
         return $this->request->getUri()->getScheme() === 'https';
     }
 
-    protected function canOpen() 
+    /**
+     * @return bool
+     */
+    protected function canOpen()
     {
         if (!($this->request->getUri()->getHost())) {
             $this->error_code = self::ERROR_HOST_UNREACHABLE;
@@ -67,6 +115,9 @@ class Socket
         return true;
     }
 
+    /**
+     * @return bool
+     */
     public function open()
     {
 
@@ -84,7 +135,10 @@ class Socket
         return $this->checkOpened();
     }
 
-    protected function checkOpened() 
+    /**
+     * @return bool
+     */
+    protected function checkOpened()
     {
         if ($this->_socket == false) {
             // If proxy not reachable
@@ -99,7 +153,10 @@ class Socket
         return true;
     }
 
-    protected function getClientRemoteURI() 
+    /**
+     * @return string
+     */
+    protected function getClientRemoteURI()
     {
         $protocol_prefix = '';
         $host = DNSUtil::getIpByHostName($this->request->getUri()->getHost());
@@ -113,7 +170,10 @@ class Socket
         return $protocol_prefix . $host . ':'.$port;
     }
 
-    protected function getClientContext() 
+    /**
+     * @return resource
+     */
+    protected function getClientContext()
     {
         if ($this->isSSLConnection()) {
             return @stream_context_create(['ssl' => array('peer_name' => $this->request->getUri()->getHost())]);
@@ -121,27 +181,50 @@ class Socket
         return @stream_context_create();
     }
 
-    public function close() 
+    /**
+     *
+     */
+    public function close()
     {
         @fclose($this->_socket);
     }
 
+    /**
+     * @param string $message
+     *
+     * @return int
+     */
     public function send($message = '')
     {
         return @fwrite($this->_socket, $message, strlen($message));
     }
 
-    public function read($buffer = 1024) 
+    /**
+     * @param int $buffer
+     *
+     * @return string
+     */
+    public function read($buffer = 1024)
     {
         return @fread($this->_socket, $buffer);
     }
 
-    public function gets($buffer = 128) 
+    /**
+     * @param int $buffer
+     *
+     * @return string
+     */
+    public function gets($buffer = 128)
     {
         return @fgets($this->_socket, $buffer);
     }
 
-    public function setTimeOut($timeout = null) 
+    /**
+     * @param null $timeout
+     *
+     * @return bool
+     */
+    public function setTimeOut($timeout = null)
     {
 
         if ($timeout) {
@@ -151,12 +234,18 @@ class Socket
         return @socket_set_timeout($this->_socket, $this->timeout);
     }
 
+    /**
+     * @return array
+     */
     public function getStatus()
     {
         return @socket_get_status($this->_socket);
     }
 
-    public function checkTimeoutStatus() 
+    /**
+     * @return bool
+     */
+    public function checkTimeoutStatus()
     {
         $status = $this->getStatus();
         if ($status["timed_out"] == true) {
@@ -167,12 +256,18 @@ class Socket
         return false;
     }
 
-    public function isEOF() 
+    /**
+     * @return bool
+     */
+    public function isEOF()
     {
         return ($this->getStatus()["eof"] == true || feof($this->_socket) == true);
     }
 
-    public function getUnreadBytes() 
+    /**
+     * @return mixed
+     */
+    public function getUnreadBytes()
     {
         return $this->getStatus()['unread_bytes'];
     }
