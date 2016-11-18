@@ -14,6 +14,10 @@ use PhDescriptors\ProxyDescriptor;
 use PhDownloader\Enums\Protocols;
 use PhDownloader\Response\ResponseInfo;
 use PhDownloader\Response\ResponseHeader;
+use PhMessage\Response;
+use PhMessage\Stream;
+use PhMessage\StreamWrapper;
+use Psr\Http\Message\RequestInterface;
 
 class Downloader implements DownloaderInterface
 {
@@ -176,101 +180,14 @@ class Downloader implements DownloaderInterface
     protected $receive_content_types = null;
 
     /**
-     * Sets the URL for the request.
-     *
-     * @param LinkDescriptor $UrlDescriptor An URLDescriptor-object containing the URL to request
+     * @var RequestInterface
      */
-    public function setUrl(LinkDescriptor $UrlDescriptor)
+    protected $request;
+
+    public function sendRequest(RequestInterface $request, $options = [])
     {
-        $this->LinkDescriptor = $UrlDescriptor;
+        $this->request = $request;
 
-        if (!$this->LinkPartsDescriptor) {
-            $this->LinkPartsDescriptor = new LinkPartsDescriptor();
-        }
-
-        $this->LinkPartsDescriptor->init($this->LinkDescriptor->url_rebuild);
-    }
-
-    /**
-     * Adds a cookie to send with the request.
-     *
-     * @param string $name  Cookie-name
-     * @param string $value Cookie-value
-     */
-    public function addCookie($name, $value)
-    {
-        $this->cookie_data[$name] = $value;
-    }
-
-    /**
-     * Adds a cookie to send with the request.
-     *
-     * @param CookieDescriptor $Cookie
-     */
-    public function addCookieDescriptor(CookieDescriptor $Cookie)
-    {
-        $this->addCookie($Cookie->name, $Cookie->value);
-    }
-
-    /**
-     * Adds a bunch of cookies to send with the request.
-     *
-     * @param array $cookies Numeric array containins cookies as CookieDescriptor-objects
-     */
-    public function addCookieDescriptors($cookies)
-    {
-        $cnt = count($cookies);
-        for ($x = 0; $x < $cnt; ++$x) {
-            $this->addCookieDescriptor($cookies[$x]);
-        }
-    }
-
-    /**
-     * Removes all cookies to send with the request.
-     */
-    public function clearCookies()
-    {
-        $this->cookie_data = array();
-    }
-
-    /**
-     * @param $key
-     * @param $value
-     */
-    public function addPostData($key, $value)
-    {
-        $this->post_data[$key] = $value;
-    }
-
-    /**
-     * Removes all post-data to send with the request.
-     */
-    public function clearPostData()
-    {
-        $this->post_data = array();
-    }
-
-    public function setProxy(ProxyDescriptor $Proxy)
-    {
-        $this->ProxyDescriptor = $Proxy;
-    }
-
-    /**
-     * @param $username
-     * @param $password
-     */
-    public function setBasicAuthentication($username, $password)
-    {
-        if (!($this->LinkPartsDescriptor instanceof LinkPartsDescriptor)) {
-            $this->LinkPartsDescriptor = new LinkPartsDescriptor();
-        }
-
-        $this->LinkPartsDescriptor->auth_username = $username;
-        $this->LinkPartsDescriptor->auth_password = $password;
-    }
-
-    public function fetch()
-    {
         $this->init();
 
         if (!$this->openSocket()) {
@@ -287,22 +204,9 @@ class Downloader implements DownloaderInterface
      */
     protected function init()
     {
-        if (!$this->LinkDescriptor) {
+        if (!$this->request) {
             throw new \Exception('Require connection information!');
         }
-
-        if (!$this->LinkPartsDescriptor) {
-            $this->LinkPartsDescriptor = new LinkPartsDescriptor(
-                $this->LinkDescriptor->url_rebuild
-            );
-        } elseif (!$this->LinkPartsDescriptor->host) {
-            $this->LinkPartsDescriptor->init($this->LinkDescriptor->url_rebuild);
-        }
-
-        if (!$this->http_protocol_version) {
-            $this->http_protocol_version = Protocols::HTTP_1_1;
-        }
-
         $this->initResponseInfo();
     }
 
@@ -311,8 +215,7 @@ class Downloader implements DownloaderInterface
      */
     protected function openSocket()
     {
-        $this->Socket = $Socket = new Socket();
-        $Socket->LinkParsDescriptor = $this->LinkPartsDescriptor;
+        $this->Socket = $Socket = new Socket($this->request);
 
         \PhBench\reset_benchmarks(DownloaderInterface::TIME_SERVER_CONNECT);
         \PhBench\start_benchmark(DownloaderInterface::TIME_SERVER_CONNECT);
@@ -332,11 +235,10 @@ class Downloader implements DownloaderInterface
 
     protected function sendRequestContent()
     {
+
         $requestHeaderRaw = $this->buildRequestHeaderRaw();
-
-        $this->setResponseInfoHeaderSend($requestHeaderRaw);
-
         $this->Socket->send($requestHeaderRaw);
+
     }
 
     /**
@@ -346,26 +248,26 @@ class Downloader implements DownloaderInterface
     {
         $responseHeaderRaw = $this->readResponseHeader();
 
-        $this->ResponseHeader = new ResponseHeader($responseHeaderRaw, $this->LinkDescriptor->url_rebuild);
+        $response = \PhMessage\parse_response($responseHeaderRaw);
 
-        $this->setResponseInfoResponseHeader($this->ResponseHeader);
+        $receive = $this->decideReceiveContent(new ResponseHeader($responseHeaderRaw, (string)$this->request->getUri()));
 
-        $receive = $this->decideReceiveContent($this->ResponseHeader);
+        if ($receive === false) {
 
-        if ($receive == false) {
             $this->Socket->close();
-            $this->ResponseInfo->received = false;
 
-            return $this->ResponseInfo;
-        } else {
-            $this->ResponseInfo->received = true;
+            return $response;
         }
 
-        $this->setResponseInfoContent($this->readResponseBody());
+        $body = $this->readResponseBody();
 
-        $this->setResponseInfoStatistics();
+        if ($body) {
+            $response = $response->withBody(\PhMessage\stream_for($body));
+        }
 
-        return $this->ResponseInfo;
+//        $this->setResponseInfoStatistics();
+
+        return [$this->ResponseInfo, $response];
     }
 
     /**

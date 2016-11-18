@@ -13,10 +13,10 @@ $link = new \PhDescriptors\LinkDescriptor(
     'https://www.baidu.com'
 );
 
-$Request = new \PhDownloader\Downloader();
-$Request->setUrl($link);
+$request = new \PhMessage\Request('GET', 'https://www.baidu.com');
 
-$DocumentInfo = $Request->fetch();
+$Request = new \PhDownloader\Downloader();
+$DocumentInfo = $Request->sendRequest($request);
 
 
 var_dump($DocumentInfo);

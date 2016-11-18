@@ -12,86 +12,6 @@ namespace PhDownloader\Response;
 class ResponseInfo
 {
     /**
-     * The complete, full qualified URL of the page or file, e.g. "http://www.foo.com/bar/page.html?x=y".
-     *
-     * @var     string
-     * @section 1 URL-related information
-     */
-    public $url = "";
-
-    /**
-     * The linking-depth of the URL related to the entry-URL of the crawling-process.
-     *
-     * @var     int
-     * @section 1 URL-related information
-     */
-    public $url_link_depth = null;
-
-    /**
-     * The protocol-part of the URL of the page or file, e.g. "http://"
-     *
-     * @var     string
-     * @section 1 URL-related information
-     */
-    public $protocol = "";
-
-    /**
-     * The host-part of the URL of the requested page or file, e.g. "www.foo.com".
-     *
-     * @var     string
-     * @section 1 URL-related information
-     */
-    public $host = "";
-
-    /**
-     * The path in the URL of the requested page or file, e.g. "/page/".
-     *
-     * @var     string
-     * @section 1 URL-related information
-     */
-    public $path = "";
-
-    /**
-     * The name of the requested page or file, e.g. "page.html".
-     *
-     * @var     string
-     * @section 1 URL-related information
-     */
-    public $file = "";
-
-    /**
-     * The query-part of the URL of the requested page or file, e.g. "?x=y".
-     *
-     * @var     string
-     * @section 1 URL-related information
-     */
-    public $query = "";
-
-    /**
-     * The port of the URL the request was send to, e.g. 80
-     *
-     * @var     int
-     * @section 1 URL-related information
-     */
-    public $port;
-
-    /**
-     * The complete HTTP-header the webserver responded with this page or file.
-     *
-     * @var     string
-     * @section 2 Content-related information
-     */
-    public $header_received = "";
-
-
-    /**
-     * The complete HTTP-request-header the crawler sent to the server (debugging info).
-     *
-     * @var string
-     */
-    public $header_send = "";
-
-    /**
      * Flag indicating whether content was received from the page or file.
      *
      * @var     bool TRUE if the crawler received at least some source/content of this page or file.
@@ -120,15 +40,6 @@ class ResponseInfo
      */
     public $received_to_memory = false;
 
-    /**
-     * Will be true if the content was received into temporary file.
-     *
-     * The content is stored in the temporary file $pageInfo->content_tmp_file in this case.
-     *
-     * @section 2 Content-related information
-     * @var     bool
-     */
-    public $received_to_file = false;
 
     /**
      * The number of bytes the crawler received of the content of the document.
@@ -139,31 +50,6 @@ class ResponseInfo
     public $bytes_received = 0;
 
     /**
-     * The number of bytes the crawler received of the header of the document.
-     *
-     * @var     int Received bytes
-     * @section 2 Content-related information
-     */
-    public $header_bytes_received = 0;
-
-    /**
-     * The content-type of the page or file, e.g. "text/html" or "image/gif".
-     *
-     * @var     string The content-type
-     * @section 2 Content-related information
-     */
-    public $content_type = "";
-
-
-    /**
-     * Same as "content", the content of the requested document.
-     *
-     * @var     string
-     * @section 2 Content-related information
-     */
-    public $content = "";
-
-    /**
      * The temporary file to which the content was received.
      *
      * Will be NULL if the content wasn't received to the temporary file.
@@ -172,51 +58,6 @@ class ResponseInfo
      * @section 2 Content-related information
      */
     public $content_tmp_file = null;
-
-    /**
-     * The HTTP-statuscode the webserver responded for the request, e.g. 200 (OK) or 404 (file not found).
-     *
-     * @var     int
-     * @section 2 Content-related information
-     */
-    public $http_status_code = null;
-
-    /**
-     * The complete URL of the page that contained the link to this document.
-     *
-     * @var     string
-     * @section 7 Referer information
-     */
-    public $referer_url = null;
-
-    /**
-     * The html-sourcecode that contained the link to the current document.
-     *
-     * (E.g. <a href="../foo.html">LINKTEXT</a>)
-     *
-     * @var     string
-     * @section 7 Referer information
-     */
-    public $refering_link_code = null;
-
-    /**
-     * Contains the raw link as it was found in the content of the refering URL. (E.g. "../foo.html")
-     *
-     * @var     string
-     * @section 7 Referer information
-     */
-    public $refering_link_raw = null;
-
-    /**
-     * The linktext of the link that "linked" to this document.
-     *
-     * E.g. if the refering link was <a href="../foo.html">LINKTEXT</a>, the refering linktext is "LINKTEXT".
-     * May contain html-tags of course.
-     *
-     * @var     string
-     * @section 7 Referer information
-     */
-    public $refering_link_text = null;
 
     /**
      * Indicates whether an error occured while requesting/receiving the document.
